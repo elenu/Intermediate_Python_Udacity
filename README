@@ -1,0 +1,100 @@
+
+# Meme Generator — Overview
+
+This project creates captioned images (memes) by overlaying quotes onto pictures. It provides:
+
+- A CLI to generate a single meme from an image and quote (or random selections).
+- A small Flask web app to upload/provide an image and quote via a form.
+- A Quote Engine to ingest quotes from multiple file formats (TXT, CSV, DOCX, PDF).
+
+**Key features**
+
+- Generate memes from local images or remote URLs
+
+- Ingest quotes from TXT, CSV, DOCX and PDF
+
+- CLI and web interfaces
+
+**Key requirements**
+
+- Python 3.8+
+
+- Pillow (PIL)
+
+- Flask (optional, for the web UI)
+
+- python-docx (for DOCX), PyPDF2 or `pdftotext` (for PDF), requests
+
+## Installation
+
+1. Create and activate a virtual environment:
+
+   `python3 -m venv .venv`
+
+   `source .venv/bin/activate`
+
+2. Install dependencies (example):
+
+   `pip install -r ./requirements.txt`
+
+## Usage — CLI
+
+Run the main script (from `src/`) or the project wrapper at the repository root.
+
+Examples:
+
+ - Random image & random quote:
+
+   `python3 ./main.py`
+
+ - Provide quote body and author (random image):
+
+   `python3 ./main.py --body "keep going" --author "coach"`
+
+ - Provide an image path (random quote):
+
+   `python3 ./main.py --path src/_data/photos/dog/xkcd.jpg`
+
+ - All provided:
+
+   `python3 ./main.py --body "be kind" --author "me" --path _data/photos/dog/xkcd.png`
+
+Notes:
+
+- The CLI accepts three optional arguments: `--body`, `--author`, `--path`.
+
+- If an argument is missing, the program uses a random selection.
+
+# Usage — Web app
+
+Start the Flask web app (from `src/`):
+
+   `./.venv/bin/python3 app.py`
+
+Open http://127.0.0.1:5000/ and use the form to upload an image or enter an image URL, plus quote text and author.
+
+# Module documentation
+
+- `MemeGenerator/MemeEngine.py` — image composition engine:
+
+  - Purpose: load an image, resize it (default max width 500px), draw text and author, and save the result.
+
+  - Dependencies: Pillow
+
+  - Example: `from MemeGenerator.MemeEngine import MemeEngine; me = MemeEngine('./static'); me.make_meme('img.jpg','hi','me')`
+
+- `QuoteEngine/Ingestor.py` — facade for file ingestors:
+
+  - Purpose: choose the correct concrete ingestor (TXT/CSV/DOCX/PDF) and return `QuoteMode` objects.
+
+  - Usage: `from QuoteEngine.Ingestor import Ingestor; quotes = Ingestor.parse(path)`
+
+- `QuoteEngine/IngestorInterface.py` — ingestor base + concrete implementations:
+
+  - Purpose: shared `can_ingest()` logic in base class; `TextIngestor`, `CSVIngestor`, `DocxIngestor`, `PDFIngestor` implement `parse()`.
+
+- `QuoteEngine/QuoteMode.py` — simple data model with `body` and `author` fields.
+
+- `main.py` — CLI driver (in `src/`): collects images/quotes and creates a meme. Accepts optional `--body`, `--author`, `--path`.
+
+- `app.py` — small Flask web service exposing the meme form and POST handler that downloads an image URL and generates a meme.
