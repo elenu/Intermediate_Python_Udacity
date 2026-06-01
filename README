@@ -25,6 +25,8 @@ This project creates captioned images (memes) by overlaying quotes onto pictures
 
 - python-docx (for DOCX), PyPDF2 or `pdftotext` (for PDF), requests
 
+- pandas (for CSV ingestion)
+
 ## Installation
 
 1. Create and activate a virtual environment:
@@ -72,6 +74,16 @@ Start the Flask web app (from `src/`):
    `./.venv/bin/python3 app.py`
 
 Open http://127.0.0.1:5000/ and use the form to upload an image or enter an image URL, plus quote text and author.
+
+## Templates
+
+The Flask app uses Jinja2 templates located in the `templates/` folder:
+
+- `base.html` — base layout
+- `meme_form.html` — form for creating a meme
+- `meme.html` — displays the generated meme image
+
+These templates are required for the web UI to render correctly.
 
 # Module documentation
 
