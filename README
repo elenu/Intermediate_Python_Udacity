@@ -23,9 +23,14 @@ This project creates captioned images (memes) by overlaying quotes onto pictures
 
 - Flask (optional, for the web UI)
 
-- python-docx (for DOCX), PyPDF2 or `pdftotext` (for PDF), requests
+-- python-docx (for DOCX), PyPDF2 (optional), and the `pdftotext` CLI tool for PDF
+  extraction (must be installed separately, e.g. via `brew install xpdf` or
+  `sudo apt install poppler-utils`). Ensure the `pdftotext` binary is on your
+  `PATH`.
 
 - pandas (for CSV ingestion)
+
+- Note: PDF ingestion requires the `pdftotext` system utility (xpdf/poppler) to be installed and available on `PATH`.
 
 ## Installation
 
@@ -37,29 +42,29 @@ This project creates captioned images (memes) by overlaying quotes onto pictures
 
 2. Install dependencies (example):
 
-   `pip install -r ./requirements.txt`
+   `pip install -r requirements.txt`
 
 ## Usage — CLI
 
-Run the main script (from `src/`) or the project wrapper at the repository root.
+Run the main script from the repository root using `python3 main.py`.
 
 Examples:
 
  - Random image & random quote:
 
-   `python3 ./main.py`
+  `python3 main.py`
 
  - Provide quote body and author (random image):
 
-   `python3 ./main.py --body "keep going" --author "coach"`
+  `python3 main.py --body "keep going" --author "coach"`
 
  - Provide an image path (random quote):
 
-   `python3 ./main.py --path src/_data/photos/dog/xkcd.jpg`
+  `python3 main.py --path _data/photos/dog/xander_1.jpg`
 
  - All provided:
 
-   `python3 ./main.py --body "be kind" --author "me" --path _data/photos/dog/xkcd.png`
+  `python3 main.py --body "be kind" --author "me" --path _data/photos/dog/xander_4.jpg`
 
 Notes:
 
@@ -69,9 +74,14 @@ Notes:
 
 # Usage — Web app
 
-Start the Flask web app (from `src/`):
 
-   `./.venv/bin/python3 app.py`
+Start the Flask web app (from the repository root):
+
+  `.venv/bin/python3 app.py`
+
+Or, after activating the virtualenv:
+
+  `python3 app.py`
 
 Open http://127.0.0.1:5000/ and use the form to upload an image or enter an image URL, plus quote text and author.
 
@@ -93,7 +103,7 @@ These templates are required for the web UI to render correctly.
 
   - Dependencies: Pillow
 
-  - Example: `from MemeGenerator.MemeEngine import MemeEngine; me = MemeEngine('./static'); me.make_meme('img.jpg','hi','me')`
+  - Example: `from MemeGenerator.MemeEngine import MemeEngine; me = MemeEngine('static'); me.make_meme('img.jpg','hi','me')`
 
 - `QuoteEngine/Ingestor.py` — facade for file ingestors:
 
@@ -107,6 +117,6 @@ These templates are required for the web UI to render correctly.
 
 - `QuoteEngine/QuoteMode.py` — simple data model with `body` and `author` fields.
 
-- `main.py` — CLI driver (in `src/`): collects images/quotes and creates a meme. Accepts optional `--body`, `--author`, `--path`.
+- `main.py` — CLI driver (in root directory): collects images/quotes and creates a meme. Accepts optional `--body`, `--author`, `--path`.
 
 - `app.py` — small Flask web service exposing the meme form and POST handler that downloads an image URL and generates a meme.
