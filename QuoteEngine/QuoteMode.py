@@ -1,5 +1,6 @@
-# This module defines the QuoteMode class, which is a simple data structure 
+# This module defines the QuoteMode class, which is a simple data structure
 # to hold a quote's body and author.
+
 
 class QuoteMode:
     """A simple QuoteMode class to encapsulate the body and author."""
@@ -20,13 +21,14 @@ class QuoteMode:
     def __str__(self):
         """Return a string representation of the QuoteMode."""
         return f'"{self.body}" - {self.author}'
-    
+
     def __repr__(self):
-        """Return an unambiguous string representation of the QuoteMode."""
-        return f'QuoteMode(body="{self.body}", author="{self.author}")'
-    
+        """Return the quote-style representation (same as __str__)."""
+        return self.__str__()
+
     def __eq__(self, other):
-        """Check if two QuoteMode instances are equal based on their body and author."""
+        """Check equality by comparing body and author."""
         if not isinstance(other, QuoteMode):
             return NotImplemented
-        return self.body == other.body and self.author == other.author
+        return (self.body == other.body and
+                self.author == other.author)
