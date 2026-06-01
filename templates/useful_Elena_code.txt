@@ -1,0 +1,16 @@
+python -m venv .venv && source .venv/bin/activate
+
+brew install xpdf
+
+# from the project root (adjust the venv path if needed)
+source .venv/bin/activate
+pip install --upgrade pip
+pip install requests Pillow python-docx PyPDF2
+
+# run the app
+cd src
+python3 app.py
+
+export FLASK_APP=app.py
+flask run --host 0.0.0.0 --port 3000 --reload
+
