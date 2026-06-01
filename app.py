@@ -10,12 +10,17 @@ from QuoteEngine import QuoteMode
 
 app = flask.Flask(__name__)
 
+
 # Use paths relative to this file so the app can be run from any CWD
 base_dir = os.path.dirname(__file__)
-meme = MemeEngine(os.path.join(base_dir, 'static'))
+
+meme = MemeEngine(
+    os.path.join(base_dir, "static")
+)
+
 
 def setup():
-    """ Load all resources """
+    """Load all resources."""
 
     quote_files = [
         os.path.join(base_dir, '_data', 'DogQuotes', 'DogQuotesTXT.txt'),
@@ -28,10 +33,10 @@ def setup():
     # quote_files variable
     quotes = None
 
-    images_path = os.path.join(base_dir, '_data', 'photos', 'dog')
+    images_path = os.path.join(base_dir, "_data", "photos", "dog")
 
     if not Ingestor.can_ingest(quote_files[0]):
-        raise Exception('Cannot ingest file: {}'.format(quote_files[0]))
+        raise Exception(f"Cannot ingest file: {quote_files[0]}")
     quotes = Ingestor.parse(quote_files[0])
     quotes += Ingestor.parse(quote_files[1])
     quotes += Ingestor.parse(quote_files[2])
@@ -42,18 +47,23 @@ def setup():
     imgs = None
     os.walk(images_path)
     imgs = [os.path.join(images_path, img) for img in os.listdir(images_path)]
-    imgs = [img for img in imgs if img.lower().endswith(('.jpg', '.jpeg', '.png'))]
-    
+    imgs = [
+        img for img in imgs
+        if img.lower().endswith(('.jpg', '.jpeg', '.png'))
+    ]
+
     if len(imgs) == 0:
         raise Exception('No images found in directory: {}'.format(images_path))
 
     return quotes, imgs
 
+
 quotes, imgs = setup()
+
 
 @app.route('/')
 def meme_rand():
-    """ Generate a random meme """
+    """Generate a random meme."""
 
     # @TODO:
     # Use the random python standard library class to:
@@ -71,14 +81,16 @@ def meme_rand():
     url = flask.url_for('static', filename=filename)
     return flask.render_template('meme.html', path=url)
 
+
 @app.route('/create', methods=['GET'])
 def meme_form():
-    """ User input for meme information """
+    """User input for meme information."""
     return flask.render_template('meme_form.html')
+
 
 @app.route('/create', methods=['POST'])
 def meme_post():
-    """ Create a user defined meme """
+    """Create a user defined meme."""
 
     # @TODO:
     # 1. Use requests to save the image from the image_url
@@ -96,10 +108,12 @@ def meme_post():
     try:
         response = requests.get(request_url, timeout=10)
     except requests.RequestException as e:
-        flask.abort(400, description=f'Error fetching image URL: {e}')
+        flask.abort(
+            400, description=f"Error fetching image URL: {e}"
+        )
 
     if response.status_code != 200:
-        flask.abort(400, description='Invalid image URL: {}'.format(request_url))
+        flask.abort(400, description=f"Invalid image URL: {request_url}")
 
     temp_image_path = './temp_image.jpg'
     try:
@@ -123,6 +137,7 @@ def meme_post():
     filename = os.path.basename(path)
     url = flask.url_for('static', filename=filename)
     return flask.render_template('meme.html', path=url)
+
 
 if __name__ == "__main__":
     app.run()
