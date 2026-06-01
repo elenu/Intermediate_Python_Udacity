@@ -2,7 +2,11 @@ import os
 import random
 
 # @TODO Import your Ingestor and MemeEngine classes
-from QuoteEngine.IngestorInterface import DocxIngestor, PDFIngestor, CSVIngestor, TextIngestor, IngestorInterface
+from QuoteEngine.TextIngestor import TextIngestor
+from QuoteEngine.CSVIngestor import CSVIngestor
+from QuoteEngine.DocxIngestor import DocxIngestor
+from QuoteEngine.PDFIngestor import PDFIngestor
+from QuoteEngine.IngestorInterface import IngestorInterface
 from MemeGenerator.MemeEngine import MemeEngine
 from QuoteEngine.QuoteMode import QuoteMode
 
