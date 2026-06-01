@@ -50,20 +50,32 @@ def load_images():
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate a meme from quotes and images')
-    parser.add_argument('--body', type=str, help='Quote body (optional)')
-    parser.add_argument('--author', type=str, help='Quote author (optional)')
-    parser.add_argument('--path', type=str, help='Path to an image file (optional)')
+    parser = argparse.ArgumentParser(
+        description=(
+            'Generate a meme from quotes and images'
+        ),
+    )
+    parser.add_argument(
+        '--body', type=str, help='Quote body (optional)'
+    )
+    parser.add_argument(
+        '--author', type=str, help='Quote author (optional)'
+    )
+    parser.add_argument(
+        '--path', type=str, help='Path to an image file (optional)'
+    )
     args = parser.parse_args()
 
     quotes = load_quotes()
     imgs = load_images()
 
     if not quotes and not args.body:
-        print('No quotes found; cannot generate meme unless --body is provided.', file=sys.stderr)
+        print('No quotes found; provide --body to generate a meme.',
+              file=sys.stderr)
         sys.exit(1)
     if not imgs and not args.path:
-        print('No images found; cannot generate meme unless --path is provided.', file=sys.stderr)
+        print('No images found; provide --path to generate a meme.',
+              file=sys.stderr)
         sys.exit(1)
 
     # choose image: provided path or random
